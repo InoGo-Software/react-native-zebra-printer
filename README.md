@@ -34,20 +34,59 @@
       compile project(':react-native-react-native-zebra-printer')
   	```
 
-#### Windows
-[Read it! :D](https://github.com/ReactWindows/react-native)
-
-1. In Visual Studio add the `RNReactNativeZebraPrinter.sln` in `node_modules/react-native-react-native-zebra-printer/windows/RNReactNativeZebraPrinter.sln` folder to their solution, reference from their app.
-2. Open up your `MainPage.cs` app
-  - Add `using React.Native.Zebra.Printer.RNReactNativeZebraPrinter;` to the usings at the top of the file
-  - Add `new RNReactNativeZebraPrinterPackage()` to the `List<IReactPackage>` returned by the `Packages` method
-
-
 ## Usage
-```javascript
-import RNReactNativeZebraPrinter from 'react-native-react-native-zebra-printer';
+```typescript
+import * as React from "react";
+import { Button } from "react-native";
+import RNReactNativeZebraPrinter from "react-native-react-native-zebra-printer";
 
-// TODO: What to do with the module?
-RNReactNativeZebraPrinter;
+interface IProps {}
+
+const PrinterExample: React.FC<IProps> = () => {
+    const [printer, setPrinter] = React.useState<any | null>(null);
+
+    React.useEffect(() => {
+        connectPrinter();
+
+        return () => {
+            if (printer !== null) {
+                RNReactNativeZebraPrinter.closeConnection();
+            }
+        };
+    }, []);
+
+    /**
+     * Create a connection to the printer.
+     */
+    const connectPrinter = async () => {
+        const devices = await RNReactNativeZebraPrinter.getBondedDevices();
+        const printers = devices.filter((device: any) => device.class === 1664);
+        const p = printers.length ? printers[0] : null;
+        if (p === null) {
+            console.warn("unable to find printer. Found devices:", devices);
+        }
+
+        setPrinter(p);
+
+        RNReactNativeZebraPrinter.initConnection(p.id);
+    };
+
+    const print = () => {
+        RNReactNativeZebraPrinter.print(
+            printer.id,
+            "Trip name",
+            "Depot 1",
+            "Amsterdam",
+            "2020-01-01",
+            "23:59",
+            "1/10",
+            "1234 AB"
+        );
+    };
+
+    return <Button title="print" onPress={print} />;
+};
+
+export { PrinterExample };
 ```
   
