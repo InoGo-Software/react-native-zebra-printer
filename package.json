@@ -1,6 +1,6 @@
 
 {
-  "name": "react-native-react-native-zebra-printer",
+  "name": "react-native-zebra-printer",
   "version": "1.0.0",
   "description": "Print barcodes and text with a Zebra label printer with React Native.",
   "main": "index.js",
