@@ -1,6 +1,6 @@
 
 {
-  "name": "react-native-zebra-printer",
+  "name": "@inogo/react-native-zebra-printer",
   "version": "1.0.0",
   "description": "Print barcodes and text with a Zebra label printer with React Native.",
   "main": "index.js",
@@ -14,6 +14,9 @@
   ],
   "author": "InoGo Software",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "react-native": "^0.41.2"
   }
