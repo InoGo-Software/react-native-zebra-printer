@@ -178,6 +178,7 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
   @ReactMethod
   public void print(
           String macAddress,
+          String tenantName,
           String tripName,
           String depotName,
           String delivery,
@@ -185,17 +186,20 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
           String time,
           String packageProgress,
           String zipCode,
+          String stop,
           final Promise promise) {
 
     boolean wasOpen = false;
 
     HashMap<String, String> data = new HashMap<>();
-    data.put("varDepotName", depotName != null ? depotName : "");
-    data.put("varZipcode", zipCode != null ? zipCode : "");
-    data.put("varPackage", packageProgress != null ? packageProgress : "");
+    data.put("varTenantName", tenantName != null ? tenantName : "");
     data.put("varTripName", tripName != null ? tripName : "");
+    data.put("varDepotName", depotName != null ? depotName : "");
     data.put("varDeliveryDate", delivery != null ? delivery : "");
     data.put("varScannedTime", date != null && time != null ? date + " " + time : "");
+    data.put("varPackage", packageProgress != null ? packageProgress : "");
+    data.put("varZipcode", zipCode != null ? zipCode : "");
+    data.put("varStop", stop != null ? stop : "");
 
     Log.d(TAG, this.getLabel(data));
 

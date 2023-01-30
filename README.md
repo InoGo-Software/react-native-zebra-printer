@@ -74,13 +74,15 @@ const PrinterExample: React.FC<IProps> = () => {
     const print = () => {
         RNReactNativeZebraPrinter.print(
             printer.id,
+            "Tenant name",
             "Trip name",
             "Depot 1",
-            "Amsterdam",
+            "Levering",
             "2020-01-01",
             "23:59",
             "1/10",
-            "1234 AB"
+            "1234 AB",
+			"Amsterdam"
         );
     };
 
