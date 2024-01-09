@@ -206,7 +206,7 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
         boolean wasOpen = this.isConnected();
 
         // If the connection was open but the macAdress is different.
-        if (wasOpen && this.macAddress && this.macAddress != macAddress) {
+        if (wasOpen && this.macAddress != "" && this.macAddress != macAddress) {
             Log.d(TAG, "Closing previous connection and opening new one since the macAddress is different");
 
             // Close the previous connection.
