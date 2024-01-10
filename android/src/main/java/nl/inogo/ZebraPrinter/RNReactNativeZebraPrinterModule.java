@@ -13,7 +13,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.zebra.sdk.comm.BluetoothConnection;
-import com.zebra.sdk.comm.Connection;
 import com.zebra.sdk.comm.ConnectionException;
 import com.zebra.sdk.printer.PrinterLanguage;
 import com.zebra.sdk.printer.ZebraPrinter;
@@ -42,7 +41,7 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
     private final ReactApplicationContext reactContext;
     private BluetoothAdapter bluetoothAdapter;
 
-    private Connection connection;
+    private BluetoothConnection connection;
     private ZebraPrinter printer;
     private String template;
 
