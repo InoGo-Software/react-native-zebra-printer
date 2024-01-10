@@ -45,7 +45,6 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
     private Connection connection;
     private ZebraPrinter printer;
     private String template;
-    private String macAddress;
 
     public RNReactNativeZebraPrinterModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -95,7 +94,6 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
         if (this.connection == null) {
             Log.d(TAG, "Init connection");
             this.connection = new BluetoothConnection(macAddress);
-            this.macAddress = macAddress;
             this.openConnection();
             return;
         }
@@ -130,10 +128,12 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
             try {
                 this.connection.close();
                 Log.d(TAG, "Successfully closed connection");
+                this.connection = null;
                 promise.resolve(true);
                 return;
             } catch (ConnectionException e) {
                 Log.e(TAG, e.getMessage());
+                this.connection = null;
                 promise.reject("Not disconnected");
                 return;
             }
@@ -141,6 +141,7 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
             Log.d(TAG, "Connection was never open");
         }
 
+        this.connection = null;
         promise.resolve(true);
     }
 
@@ -150,14 +151,14 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
             try {
                 this.connection.close();
                 Log.d(TAG, "Successfully closed connection");
-                return;
             } catch (ConnectionException e) {
                 Log.e(TAG, e.getMessage());
-                return;
             }
         } else {
             Log.d(TAG, "Connection was never open");
         }
+
+        this.connection = null;
     }
 
     /**
@@ -207,23 +208,24 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
 
         Log.d(TAG, "wasOpen=" + wasOpen + " macAddress=" + macAddress);
 
-        // If the connection was open but the macAdress is different.
-        if (wasOpen && this.macAddress != "" && this.macAddress != macAddress) {
-            Log.d(TAG, "Closing previous connection and opening new one since the macAddress is different");
-
-            // Close the previous connection.
-            try {
-                this.connection.close();
-            } catch (ConnectionException e) {
-                Log.e(TAG, "Something went wrong while closing the connection");
-                Log.e(TAG, e.getMessage());
-            }
-
-            // Open the new connection with the correct macAddress.
-            this.initConnection(macAddress);
-        }
 
         if (wasOpen) {
+            // If the connection was open but the macAdress is different.
+            if (this.connection != null && this.connection.getMACAddress() != macAddress) {
+                Log.d(TAG, "Closing previous connection and opening new one since the macAddress is different");
+
+                // Close the previous connection.
+                try {
+                    this.connection.close();
+                } catch (ConnectionException e) {
+                    Log.e(TAG, "Something went wrong while closing the connection");
+                    Log.e(TAG, e.getMessage());
+                }
+
+                // Open the new connection with the correct macAddress.
+                this.initConnection(macAddress);
+            }
+
             Log.d(TAG, "Was already connected");
         } else {
             Log.d(TAG, "No connection was found");
@@ -280,7 +282,6 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
             // handle the timeout
             Log.d(TAG, "Timeout here");
             this.closeConnectionLocal();
-            this.initConnection(this.macAddress);
         } catch (InterruptedException e) {
             // handle the interrupts
             Log.d(TAG, "Interrupted here");
