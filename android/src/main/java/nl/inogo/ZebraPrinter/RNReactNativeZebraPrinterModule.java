@@ -241,6 +241,8 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
                 Log.e(TAG, "Something went wrong while closing the connection");
                 Log.e(TAG, e.getMessage());
             }
+
+            this.connection = null;
         }
 
         promise.resolve(true);
