@@ -210,16 +210,10 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
 
         if (wasOpen) {
             // If the connection was open but the macAdress is different.
-            if (this.connection != null && this.connection.getMACAddress() != macAddress) {
-                Log.d(TAG, "Closing previous connection and opening new one since the macAddress is different");
+            if (this.connection != null && !this.connection.getMACAddress().equals(macAddress)) {
+                Log.d(TAG, "Closing previous connection and opening new one since the macAddress is different, open macAdress=" + this.connection.getMACAddress());
 
-                // Close the previous connection.
-                try {
-                    this.connection.close();
-                } catch (ConnectionException e) {
-                    Log.e(TAG, "Something went wrong while closing the connection");
-                    Log.e(TAG, e.getMessage());
-                }
+                this.closeConnectionLocal();
 
                 // Open the new connection with the correct macAddress.
                 this.initConnection(macAddress);
@@ -235,14 +229,7 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
 
         // Close connection if it wasn't open before
         if (!wasOpen) {
-            try {
-                this.connection.close();
-            } catch (ConnectionException e) {
-                Log.e(TAG, "Something went wrong while closing the connection");
-                Log.e(TAG, e.getMessage());
-            }
-
-            this.connection = null;
+            this.closeConnectionLocal();
         }
 
         promise.resolve(true);
