@@ -59,7 +59,7 @@ public class RNReactNativeZebraPrinterModule extends ReactContextBaseJavaModule 
     /**
      * Check if the device is connected to the printer.
      */
-    @ReactMethod
+    @ReactMethod(isBlockingSynchronousMethod = true)
     public boolean isConnected() {
         if (this.connection == null) {
             return false;
