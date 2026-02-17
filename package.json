@@ -1,6 +1,6 @@
 {
   "name": "@inogo/react-native-zebra-printer",
-  "version": "1.4.5",
+  "version": "1.4.7",
   "description": "Print barcodes and text with a Zebra label printer with React Native.",
   "main": "index.js",
   "scripts": {
